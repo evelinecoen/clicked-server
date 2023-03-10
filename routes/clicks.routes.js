@@ -22,8 +22,23 @@ router.get("/clicks", isAuthenticated, async (req, res, next) => {
     const filteredResponse = response.filter(
       (user) => user._id.toString() !== _id.toString()
     );
-    console.log(filteredResponse);
+
     res.json(filteredResponse);
+
+    const match = filteredResponse.map((user) => {
+      let count = 0;
+      for (let i = 0; i < user.questionnaire.length; i++) {
+        if (user.questionnaire[i]) {
+          count++;
+        }
+        if (count >= 3) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    console.log(match);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Something went wrong" });
