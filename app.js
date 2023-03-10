@@ -24,6 +24,9 @@ app.use("/api", questionsRoutes);
 const profileRoutes = require("./routes/profile.routes");
 app.use("/api", profileRoutes);
 
+const clicksRoutes = require("./routes/clicks.routes");
+app.use("/api", clicksRoutes);
+
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 

@@ -13,13 +13,25 @@ router.get("/profile/:id", async (req, res, next) => {
   }
 });
 
-/*
-router.post("/profile", async (req, res, next) => {
 
-    const { question1, question2, question3, question4,question5,question6 } = req.body;
+/* const userInfo = {
+  name: response.name,
+  description: response.email,
+  imageURL: response.imageURL,
+  questionnaire: response.questionnaire
+}; */
+
+
+
+  /*
+
+
+  router.post("/profile", async (req, res, next) => {
+
+    const { name, imageURL, description, questionnaire } = req.body;
   
     try {
-      const question = await Question.create({ question1, question2, question3, question4,question5,question6});
+      const response = await User.create({ name, imageURL, description, questionnaire});
       res.json(question);
     } catch (error) {
       res.json(error);
