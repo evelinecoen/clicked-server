@@ -1,20 +1,19 @@
-/* const router = require("express").Router();
+const router = require("express").Router();
 const mongoose = require("mongoose");
-const Question = require("../models/Question.model")
 const User = require("../models/User.model");
 
-
-router.get("/profile", async (req, res, next) => {
+router.get("/profile/:id", async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const profile = await User.findById();
-    console.log(profile);
-    res.json(profile);
+    const response = await User.findById(id);
+    console.log(response);
+    res.json(response);
   } catch (error) {
     res.json(error);
   }
 });
 
-
+/*
 router.post("/profile", async (req, res, next) => {
 
     const { question1, question2, question3, question4,question5,question6 } = req.body;
@@ -75,5 +74,5 @@ router.delete("/profile/:id", async (req, res, next) => {
     res.json(error);
   }
 });
-
-module.exports = router;  */
+*/
+module.exports = router;
