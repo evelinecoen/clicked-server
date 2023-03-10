@@ -58,7 +58,7 @@ router.post("/signup", (req, res, next) => {
 
       // Create the new user in the database
       // We return a pending promise, which allows us to chain another `then`
-      return User.create({ email, password: hashedPassword, name});
+      return User.create({ email, password: hashedPassword, name });
     })
 
     .then((createdUser) => {
@@ -67,7 +67,7 @@ router.post("/signup", (req, res, next) => {
       const { email, name, _id } = createdUser;
 
       // Create a new object that doesn't expose the password
-      const user = { email, name, _id};
+      const user = { email, name, _id };
 
       // Send a json response containing the user object
       res.status(201).json({ user: user });
@@ -84,8 +84,6 @@ router.post("/login", (req, res, next) => {
     res.status(400).json({ message: "Provide email and password." });
     return;
   }
-
-
 
   // Check the users collection if a user with the same email exists
   User.findOne({ email })

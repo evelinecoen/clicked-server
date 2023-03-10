@@ -1,63 +1,44 @@
-/* const router = require("express").Router();
-const mongoose = require("mongoose");
-const User = require("../models/User.model");
-
-router.get("/clicks", async (req, res, next) => {
-
-
-
-  try {
-
-
-    const response = await User.find();
-
-    const userInfo = {
-      name: response.name,
-      description: response.email,
-      imageURL: response.imageURL,
-      questionnaire: response.questionnaire
-    }; 
-
-    
-
-    res.json(response);
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-    
-  }
-});
-module.exports = router; */
-
-
-
 const router = require("express").Router();
 const mongoose = require("mongoose");
 const User = require("../models/User.model");
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 
-router.get("/users", async (req, res, next) => {
-  const { page = 1, limit = 10, sortBy = "createdAt", sortDir = "desc" } =
-    req.query;
-  const skip = (page - 1) * limit;
-  const sortOptions = { [sortBy]: sortDir === "desc" ? -1 : 1 };
+/* router.get("/clicks",  async (req, res, next) => {
 
   try {
-    const users = await User.find({}, { password: 0 })
-      .skip(skip)
-      .limit(parseInt(limit))
-      .sort(sortOptions);
+    const response = await User.find();
+    res.json(response);
+    response.filter()
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });  
+  }
+}); */
 
-    const count = await User.countDocuments();
+router.get("/clicks", isAuthenticated, async (req, res, next) => {
+  const { _id } = req.payload;
+  try {
+    const response = await User.find();
 
-    res.json({
-      users,
-      totalPages: Math.ceil(count / limit),
-      currentPage: parseInt(page),
-    });
+    const filteredResponse = response.filter(
+      (user) => user._id.toString() !== _id.toString()
+    );
+    console.log(filteredResponse);
+    res.json(filteredResponse);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+router.get("/clicks/:id", async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const response = await User.findById(id);
+
+    res.json(response);
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
 });
 
 module.exports = router;
-
-
