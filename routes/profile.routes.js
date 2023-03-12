@@ -13,6 +13,26 @@ router.get("/profile/:id", async (req, res, next) => {
   }
 });
 
+router.put("/profile/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const { imageURL, description } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.json("The provided user id is not valid");
+  }
+
+  try {
+    const updatedProfile = await User.findByIdAndUpdate(
+      id,
+      { imageURL, description },
+      { new: true }
+    );
+    res.json(updatedProfile);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
 
 /* const userInfo = {
   name: response.name,
