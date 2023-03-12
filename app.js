@@ -11,6 +11,9 @@ const express = require("express");
 
 const app = express();
 
+
+
+
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
 require("./config")(app);
 
@@ -28,6 +31,9 @@ app.use("/api", profileRoutes);
 
 const clicksRoutes = require("./routes/clicks.routes");
 app.use("/api", clicksRoutes);
+
+const messagesRoutes = require("./routes/messages.routes");
+app.use("/api", messagesRoutes);
 
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);

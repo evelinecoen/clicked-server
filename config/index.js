@@ -35,4 +35,43 @@ module.exports = (app) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
+
+
+  //Socket OI 
+  const http = require('http')  // for the chat
+  const {Server} = require("socket.io")
+  const server = http.createServer(app);
+
+
+const io = new Server(server, {
+    cors: {
+        origin: FRONTEND_URL, 
+        method: ["GET", "POST"],
+   },
+});
+
+io.on("connection", (socket) => {
+    console.log(`User connected`)
+
+    socket.on("id", (userId) => {
+      socket.join(userId)
+   /*    console.log(`User with ID: ${socket.id}`) */
+    })
+
+    socket.on("message", (message) => {
+      socket.to(userId).emit('message', message)
+      /* console.log(`User with ID: ${socket.id}`) */
+    })
+
+    socket.on("disconnect", () =>{
+        console.log("User Disconnected")
+    })
+});
+
 };
+
+
+
+
+
+// END CHAT CODE
