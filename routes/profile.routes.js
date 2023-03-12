@@ -33,6 +33,23 @@ router.put("/profile/:id", async (req, res, next) => {
   }
 });
 
+router.delete("/profile/:id", async (req, res, next) => {
+  const { id } = req.params;
+ 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.json("The provided answer id is not valid");
+  }
+
+  try {
+ 
+      //remove profile
+    await User.findByIdAndRemove(id);
+    res.json({ message: `Answer with the id ${id} deleted successfully` });
+  } catch (error) {
+    res.json(error);
+  }
+});
+
 
 /* const userInfo = {
   name: response.name,
