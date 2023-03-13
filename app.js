@@ -32,6 +32,9 @@ app.use("/api", profileRoutes);
 const clicksRoutes = require("./routes/clicks.routes");
 app.use("/api", clicksRoutes);
 
+const chatRoomRoutes = require("./routes/chat.routes");
+app.use("/api", chatRoomRoutes);
+
 const messagesRoutes = require("./routes/messages.routes");
 app.use("/api", messagesRoutes);
 

@@ -2,17 +2,11 @@ const { Schema, model } = require("mongoose");
 
 const chatRoomSchema = new Schema(
     {
-      _id: {
-        type: String,
-        default: () => uuidv4().replace(/\-/g, ""),
-      },
-      userIds: Array,
-      type: String,
-      chatInitiator: String,
+      userIds: [{type: Schema.Types.ObjectId, ref:"User"}],
+      messages: [{type: Schema.Types.ObjectId, ref:"Message"}]
     },
     {
       timestamps: true,
-      collection: "chatrooms",
     }
   );
 
