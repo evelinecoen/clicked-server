@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const mongoose = require("mongoose");
 const User = require("../models/User.model");
+const fileUploader = require("../config/cloudinary.config");
 
 router.get("/profile/:id", async (req, res, next) => {
   const { id } = req.params;
@@ -11,6 +12,17 @@ router.get("/profile/:id", async (req, res, next) => {
   } catch (error) {
     res.json(error);
   }
+});
+
+
+router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+ 
+  if (!req.file) {
+    next(new Error("No file uploaded!"));
+    return;
+  }
+  
+  res.json({ fileUrl: req.file.path });
 });
 
 router.put("/profile/:id", async (req, res, next) => {
