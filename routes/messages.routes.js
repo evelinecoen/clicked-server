@@ -19,9 +19,6 @@ const savedMsg = await createMsg.save()
 const updateChat = await chatRoom.messages.push(savedMsg)
 const saveChat = await chatRoom.save()
 
-
-
-
     res.json(createMsg);
   } catch (err) {
     console.error(err.message);
