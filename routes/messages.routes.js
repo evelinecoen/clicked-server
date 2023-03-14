@@ -28,10 +28,6 @@ const saveChat = await chatRoom.save()
 
 router.delete('/messages/:id', async (req, res)=> {
   const { id } = req.params;
- 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.json("The provided message id is not valid");
-  }
 
   try {
  
