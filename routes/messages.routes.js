@@ -19,13 +19,27 @@ const savedMsg = await createMsg.save()
 const updateChat = await chatRoom.messages.push(savedMsg)
 const saveChat = await chatRoom.save()
 
-
-
-
     res.json(createMsg);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
+  }
+});
+
+router.delete('/messages/:id', async (req, res)=> {
+  const { id } = req.params;
+ 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.json("The provided message id is not valid");
+  }
+
+  try {
+ 
+      //remove message
+    await Message.findByIdAndRemove(id);
+    res.json({ message: `Answer with the id ${id} deleted successfully` });
+  } catch (error) {
+    res.json(error);
   }
 });
 
