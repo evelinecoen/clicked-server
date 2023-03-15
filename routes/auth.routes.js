@@ -76,6 +76,7 @@ router.post("/signup", (req, res, next) => {
 });
 
 // POST  /auth/login - Verifies email and password and returns a JWT
+// POST /auth/login - Verifies email and password and returns a JWT
 router.post("/login", (req, res, next) => {
   const { email, password } = req.body;
 
@@ -89,8 +90,8 @@ router.post("/login", (req, res, next) => {
   User.findOne({ email })
     .then((foundUser) => {
       if (!foundUser) {
-        // If the user is not found, send an error response
-        res.status(401).json({ message: "User not found." });
+        // If the user is not found, send an error response with an error message
+        res.status(401).json({ message: "Incorrect email or password" });
         return;
       }
 
@@ -113,11 +114,13 @@ router.post("/login", (req, res, next) => {
         // Send the token as the response
         res.status(200).json({ authToken: authToken });
       } else {
-        res.status(401).json({ message: "Unable to authenticate the user" });
+        // If the password is incorrect, send an error response with an error message
+        res.status(401).json({ message: "Incorrect email or password" });
       }
     })
     .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
 });
+
 
 // GET  /auth/verify  -  Used to verify JWT stored on the client
 router.get("/verify", isAuthenticated, (req, res, next) => {
