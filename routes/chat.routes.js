@@ -41,7 +41,7 @@ router.post("/chat/:user1/:user2", async (req, res, next) => {
 router.get("/chats/:userId", isAuthenticated, async (req, res, next) => {
   const userId = req.payload._id;
   try {
-    /*  const { userId } = req.params; */
+  
     console.log(userId);
     const chatRooms = await ChatRoom.find({ userIds: { $in: userId } })
       .populate("userIds")
@@ -58,5 +58,11 @@ router.get("/chats/:userId", isAuthenticated, async (req, res, next) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 });
+
+
+
+
+
+
 
 module.exports = router;
