@@ -8,7 +8,7 @@
 
 ## Description
 
-Connect people base in what they have in common. Answer a questionnaire and base on that it will show the other users that have the same things in common with you.
+Connect people base in what they have in common. Answer a questionnaire and base on that it will show the other users that have the same things in common with you. Chat with them and and see your chat history, delete messages you dont want them to see.
 
 ## User Stories
 
@@ -44,11 +44,11 @@ Connect people base in what they have in common. Answer a questionnaire and base
 | `/`                          | Home             | public `<Route>`           | Home page.                                                |
 | `/profile`              | Profile         | user only `<PrivateRoute>` | User and player profile for the current user.             |
 | `/profile/edit`         | EditProfile      | user only `<PrivateRoute>` | Edit user profile form.                                   |
-| `/questions`           | Questions | user only `<PrivateRoute>` | Some question pages user needs to answer.                               |
-| `/profile/updated`               | Profile with the questions the user answered   | user only `<PrivateRoute>` | Profile with the answer the user picked.                                         |
-| `/users` | User List | user only `<PrivateRoute>` | Users List. Shows list of all users the user has in common with. |
+| `/questionnaire`           | Questions | user only `<PrivateRoute>` | Some question pages user needs to answer.                               |                                       |
+| `/clicks` | User List | user only `<PrivateRoute>` | Users List. Shows list of all users the user has in common with. |
 | `/users/profile/:id`    | UserDetails    | user only `<PrivateRoute>` | Single user details.                                    |
-| `/user/message/:id`    | Message        | user only `<PrivateRoute>` | User can get in contact with the other user.                                 |
+| `/yourchats/`    | Message        | user only `<PrivateRoute>` | User can see all chats.    
+                            |
 
 
 
@@ -69,24 +69,22 @@ Pages:
   
 - Questions (many question pages (6-8))
 
-- ProfileUpdated
-
-- Users
+- Clicks
   
-- UserDetails
+- ClickDetails
   
-- Message
+- All Chats
   
-- Error
 
 
 
 Components:
 
-- UserCard
-- UsersCard
+- ChatBox
+- Private
 - Navbar
 - Footer
+- QuestionCard
 
 
 ## Services
@@ -102,13 +100,13 @@ Components:
 - **User Service**
 
   - `userService` :
-    - `.updateCurrentUser(id, userData)`
-    - `.getCurrentUser()`
+  - `.updateCurrentUser(id, userData)`
+  - `.getCurrentUser()`
 
 - **Question Service**
 
   - `questionService` :
-    - `.putQuestion(id)`
+ - `.putQuestion(id)`
   
 
 <br>
@@ -137,19 +135,29 @@ Components:
 **Message model**
 
 ```javascript
- {
-   message: { type: [String], required: true },
- }
+  {
+  author: {type: Schema.Types.ObjectId, ref:"User"},
+  text: {
+    type: String,
+    required: true
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  }
 ```
 
 
 **Chat model**
 
 ```javascript
-{
-  chat: { type: String, required: true },
-
-}
+    {
+      userIds: [{type: Schema.Types.ObjectId, ref:"User"}],
+      messages: [{type: Schema.Types.ObjectId, ref:"Message"}]
+    },
+    {
+      timestamps: true,
+    }
 ```
 
 
@@ -165,13 +173,19 @@ Components:
 | POST        | `/auth/signup`         | {name, email, password}      | 201            | 404          | Checks if fields not empty (422) and user not exists (409), then create user with encrypted password, and store user in session |
 | POST        | `/auth/login`          | {username, password}         | 200            | 401          | Checks if fields not empty (422), if user exists (404), and if password matches (404), then stores user in session |
 | POST        | `/auth/logout`         |                              | 204            | 400          | Logs out the user                                            |
-| PUT         | `/api/question/:id` | { [questionnaire] }       | 200            | 400          | edit question                                              |
-| DELETE      | `/api/matches/:id` |                              | 201            | 400          | delete the matched you dont like.                                         |
-| GET         | `/api/matches`     |                              |                |              | show matched profile                                         |
-| GET        | `/api/matches/:id`         | { name, img, description, questionnaire }  | 200            | 404          |                                                    |
+| PUT         | `/api/questionnaire` | { [questionnaire] }       | 200            | 400          | questions user needs to answer in order to see his matchs. This route updates the users profile.                                             |
+| DELETE      | `/api/messages/:id` |                              | 201            | 400          | delete messages.                                         |
+| GET         | `/api/clicks`     |                              |                |              | show matched profiles                                         |
+| GET        | `/api/clicks/:id`         | { name, img, description, questionnaire }  | 200            | 404          |                                                    |
 
-| DELETE      | `/api/profile`     |                              | 200            | 400          | delete your own profile                                                |
-| POST         | `/api/edit/profile`           |                              | 201            | 400          | Edit Profile                                                 |
+| DELETE      | `/api/profile/:id`     |                              | 200            | 400          | delete your own profile                                                |
+| PUT         | `/api/edit/profile`           |                              | 201            | 400          | Edit Profile                                                 |
+| POST         | `/api/message/:chatId/:user`           |                              | 201            | 400          | Create chatroom with other user                                               |
+| GET        | `/api/message`           |                              | 201            | 400          | Get message                                                |
+
+| POST         | `/api/chat/:user1/:user2`           |                              | 201            | 400          | Chat                                                |
+| GET         | `/api/chats/:userId`           |                              | 201            | 400          | All chats user have                                                |
+
 
 
 <br>
